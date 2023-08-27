@@ -5,6 +5,9 @@ data class Jogo(
     val descricao = ""
 
     override fun toString(): String {
-        return "Jogo(titulo='$titulo', capa='$capa', descricao='$descricao')"
+        return "Jogo: \n" +
+                "titulo=$titulo \n" +
+                "capa=$capa \n" +
+                "descricao=$descricao"
     }
 }
