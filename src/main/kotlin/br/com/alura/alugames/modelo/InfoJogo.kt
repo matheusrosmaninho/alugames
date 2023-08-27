@@ -1,3 +1,5 @@
+package br.com.alura.alugames.modelo
+
 import com.google.gson.annotations.SerializedName
 
 data class InfoJogo(
