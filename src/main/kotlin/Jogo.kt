@@ -1,4 +1,4 @@
-class Jogo(
+data class Jogo(
     val titulo: String,
     val capa: String
 ) {
@@ -7,6 +7,4 @@ class Jogo(
     override fun toString(): String {
         return "Jogo(titulo='$titulo', capa='$capa', descricao='$descricao')"
     }
-
-
 }
