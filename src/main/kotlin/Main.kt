@@ -1,4 +1,5 @@
 import com.google.gson.Gson
+import java.lang.Exception
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -13,20 +14,27 @@ fun main() {
 
     val endereco = "https://www.cheapshark.com/api/1.0/games?id=$busca"
     val client: HttpClient = HttpClient.newHttpClient()
-    val request = HttpRequest.newBuilder()
-        .uri(URI.create(endereco))
-        .build()
 
-    val response = client
-        .send(request, BodyHandlers.ofString())
+    try {
+        val request = HttpRequest.newBuilder()
+            .uri(URI.create(endereco))
+            .build()
 
-    val json = response.body()
-    println(json)
+        val response = client
+            .send(request, BodyHandlers.ofString())
 
-    val gson = Gson()
-    val meuInfoJogo = gson.fromJson(json, InfoJogo::class.java)
+        val json = response.body()
+        println(json)
 
-    val meuJogo = Jogo(meuInfoJogo.info.title, meuInfoJogo.info.thumb)
+        val gson = Gson()
+        val meuInfoJogo = gson.fromJson(json, InfoJogo::class.java)
 
-    println(meuJogo)
+        val meuJogo = Jogo(meuInfoJogo.info.title, meuInfoJogo.info.thumb)
+
+        println(meuJogo)
+    } catch (ex: Exception) {
+        println("Jogo não existe ...")
+    }
+
+
 }
