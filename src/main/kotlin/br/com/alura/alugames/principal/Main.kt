@@ -20,7 +20,7 @@ fun main() {
     }
 
     resultado.onFailure {
-        println("br.com.alura.alugames.modelo.Jogo não existe")
+        println("Jogo não existe")
     }
 
     resultado.onSuccess {
