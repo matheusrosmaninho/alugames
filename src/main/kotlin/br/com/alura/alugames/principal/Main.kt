@@ -1,5 +1,6 @@
 package br.com.alura.alugames.principal
 
+import br.com.alura.alugames.modelo.Gamer
 import br.com.alura.alugames.modelo.Jogo
 import br.com.alura.alugames.servicos.ConsumoApi
 import java.util.*
@@ -7,35 +8,49 @@ import java.util.*
 
 fun main() {
     val leitura = Scanner(System.`in`)
-    println("Digite o código do jogo para buscar: ")
-    val busca = leitura.nextLine()
+    val gamer = Gamer.criarGame(leitura)
 
-    var meuJogo: Jogo? = null
+    println("Cadastro concluido com sucesso")
+    println(gamer)
 
-    val resultado = runCatching {
-        val buscaApi = ConsumoApi()
-        val informacaoJogo = buscaApi.buscaJogo(busca)
+    do {
+        println("Digite o código do jogo para buscar: ")
+        val busca = leitura.nextLine()
 
-        meuJogo = Jogo(informacaoJogo.info.title, informacaoJogo.info.thumb)
-    }
+        var meuJogo: Jogo? = null
 
-    resultado.onFailure {
-        println("Jogo não existe")
-    }
+        val resultado = runCatching {
+            val buscaApi = ConsumoApi()
+            val informacaoJogo = buscaApi.buscaJogo(busca)
 
-    resultado.onSuccess {
-        println("Deseja inserir uma descrição personalizada? s/n")
-        val opcao = leitura.nextLine()
-
-        if (opcao.equals("s", true)) {
-            println("Insira a descrição personalizada para o jogo:")
-            val descricaoPersonalizada = leitura.nextLine()
-            meuJogo?.descricao = descricaoPersonalizada
-        }
-        else {
-            meuJogo?.descricao = meuJogo?.titulo
+            meuJogo = Jogo(informacaoJogo.info.title, informacaoJogo.info.thumb)
         }
 
-        println(meuJogo)
-    }
+        resultado.onFailure {
+            println("Jogo não existe")
+        }
+
+        resultado.onSuccess {
+            println("Deseja inserir uma descrição personalizada? s/n")
+            val opcao = leitura.nextLine()
+
+            if (opcao.equals("s", true)) {
+                println("Insira a descrição personalizada para o jogo:")
+                val descricaoPersonalizada = leitura.nextLine()
+                meuJogo?.descricao = descricaoPersonalizada
+            }
+            else {
+                meuJogo?.descricao = meuJogo?.titulo
+            }
+
+            gamer.jogosBuscados.add(meuJogo)
+        }
+
+        println("Deseja buscar novo jogo? s/n")
+        val resposta = leitura.nextLine()
+    } while (resposta.equals("s", true))
+
+    println("Jogos buscados")
+    println(gamer.jogosBuscados)
+    println("Busca finalizada com sucesso ...")
 }
