@@ -7,35 +7,43 @@ import java.util.*
 
 fun main() {
     val leitura = Scanner(System.`in`)
-    println("Digite o código do jogo para buscar: ")
-    val busca = leitura.nextLine()
 
-    var meuJogo: Jogo? = null
+    do {
+        println("Digite o código do jogo para buscar: ")
+        val busca = leitura.nextLine()
 
-    val resultado = runCatching {
-        val buscaApi = ConsumoApi()
-        val informacaoJogo = buscaApi.buscaJogo(busca)
+        var meuJogo: Jogo? = null
 
-        meuJogo = Jogo(informacaoJogo.info.title, informacaoJogo.info.thumb)
-    }
+        val resultado = runCatching {
+            val buscaApi = ConsumoApi()
+            val informacaoJogo = buscaApi.buscaJogo(busca)
 
-    resultado.onFailure {
-        println("Jogo não existe")
-    }
-
-    resultado.onSuccess {
-        println("Deseja inserir uma descrição personalizada? s/n")
-        val opcao = leitura.nextLine()
-
-        if (opcao.equals("s", true)) {
-            println("Insira a descrição personalizada para o jogo:")
-            val descricaoPersonalizada = leitura.nextLine()
-            meuJogo?.descricao = descricaoPersonalizada
-        }
-        else {
-            meuJogo?.descricao = meuJogo?.titulo
+            meuJogo = Jogo(informacaoJogo.info.title, informacaoJogo.info.thumb)
         }
 
-        println(meuJogo)
-    }
+        resultado.onFailure {
+            println("Jogo não existe")
+        }
+
+        resultado.onSuccess {
+            println("Deseja inserir uma descrição personalizada? s/n")
+            val opcao = leitura.nextLine()
+
+            if (opcao.equals("s", true)) {
+                println("Insira a descrição personalizada para o jogo:")
+                val descricaoPersonalizada = leitura.nextLine()
+                meuJogo?.descricao = descricaoPersonalizada
+            }
+            else {
+                meuJogo?.descricao = meuJogo?.titulo
+            }
+
+            println(meuJogo)
+        }
+
+        println("Deseja buscar novo jogo? s/n")
+        val resposta = leitura.nextLine()
+    } while (resposta.equals("s", true))
+
+    println("Busca finalizada com sucesso ...")
 }
